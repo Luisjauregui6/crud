@@ -1,6 +1,6 @@
 if(!localStorage.getItem("products")){
 	localStorage.setItem("products",JSON.stringify([
-	{pid:1,pname:"pintura",price:38},
+	{pid:1,pname:"verduras",price:10},
 	{pid:2,pname:"papel",price:44},
 	{pid:3,pname:"huevo",price:120},
 	{pid:4,pname:"peliculas",price:80},
@@ -109,7 +109,7 @@ function editSave(){
 	products[index].pname=document.forms.editForm.name.value;
 	products[index].price=document.forms.editForm.price.value;
 	localStorage.setItem("products",JSON.stringify(products));
-	alert("Successfully Saved");
+	alert("Datos actualizados");
 	$('.edit').css("display","none"); 
 	window.location.reload();
 }
@@ -117,6 +117,7 @@ function editCancel(){
 	$('.edit').css("display","none"); 
 }
 
+// This function enables the functionality to add new items to the CRUD system
 function addSave(){
 	var products=JSON.parse(localStorage.getItem("products"));
 	var name=document.forms.addForm.name.value;
@@ -139,7 +140,7 @@ function addSave(){
 	product.price=price;
 	products[len]=product;
 	localStorage.setItem("products",JSON.stringify(products));
-	alert("Successfully Saved");
+	alert("Producto agregado correctamente!");
 	$('.add').css("display","none"); 
 	window.location.reload();
 }
@@ -168,7 +169,7 @@ function selectView(){
 		$('.view-list').css("display","block"); 	
 	}
 	else{
-		alert("Please select Row to view !!!!");
+		alert("Selecciona el producto que quieres ver!");
 	}
 }
 
@@ -194,10 +195,10 @@ function selectDelete(){
 	}
 	if(checkDisplay==true){
 		localStorage.setItem("products",JSON.stringify(products));
-		alert("Successfully Deleted Selected Items...");
+		alert("Productos eliminados correctamente!");
 		window.location.reload();
 	}
 	else{
-		alert("Please select row to delete !!!!");
+		alert("Selecciona por lo menos un producto a eliminar!");
 	}
 }
