@@ -1,102 +1,114 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>CRUD</title>
-		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 
-		<script type="text/javascript" src="js/jquery.min.js"></script>
-		<script type="text/javascript" src="js/popper.min.js"></script>
-		<script type="text/javascript" src="js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="js/script.js"></script>
-	</head>
-	<body>
-		<div class="container">
-				<h1 class="text-center"></h1>
-			<div class="row">
-				<div class="table">
-					<table class="table table-hover" id="detailsTable">
-						<thead><th></th><th>Index</th><th>Producto</th><th>Precio (MXN)</th><th>Cantidad</th></thead>
-						<tbody id="tbody"></tbody>
-					</table>
-				</div>
-				<div class="btns">
-					<button type="button" class="btn btn-success" onclick="add()">agregar</button>
-					<button type="button" class="btn btn-info" onclick="selectView()">ver lista</button>
-					<button type="button" class="btn btn-danger" onclick="selectDelete()">borrar</button>
-				</div>
-			</div>
-		</div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Mi Lista De Productos</h1>
 
-		<!-- View Product -->
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-hover" id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Precio (MXN)</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
 
-		<div class="view overlay">
-			<div class="view-content col-md-8 col-sm-10 col-lg-8">
-				<h2 class="text-center">producto</h2>
-				<table class="col-md-6 col-sm-10 col-lg-6">
-					<tr><td class="bold">nombre :</td><td id="view-name"></td></tr>
-					<tr><td class="bold">precio del producto :</td><td id="view-price"></td></tr>
-				</table>
-				<div class="view-btn-close">
-					<button class="btn btn-primary" onclick="viewClose()">cerrar</button>
-				</div>
-			</div>
-		</div>
+            <div class="btns mt-3">
+                <button type="button" class="btn btn-success" onclick="add()">Agregar</button>
+                <button type="button" class="btn btn-secondary" onclick="selectView()">Ver Lista</button>
+                <button type="button" class="btn btn-primary" onclick="selectEdit()">Editar</button>
+                <button type="button" class="btn btn-danger" onclick="selectDelete()">Borrar</button>
+            </div>
+        </div>
+    </div>
 
-		<!-- Edit Product -->
+    <!-- Vista del Producto -->
+    <div class="view overlay">
+        <div class="view-content col-md-8 col-sm-10 col-lg-8">
+            <h2 class="text-center">Producto</h2>
+            <table class="table">
+                <tr><td class="fw-bold">Nombre:</td><td id="view-name"></td></tr>
+                <tr><td class="fw-bold">Precio:</td><td id="view-price"></td></tr>
+            </table>
+            <div class="view-btn-close text-end">
+                <button class="btn btn-primary" onclick="viewClose()">Cerrar</button>
+            </div>
+        </div>
+    </div>
 
-		<div class="edit overlay">
-			<div class="edit-content col-md-8 col-sm-10 col-lg-8">
-				<h2 class="text-center">editar</h2>
-				<form name="editForm" id="editForm" action="#">
-					<div class="form-group">
-						<label for="name">nombre :</label>
-						<input type="text" name="name" id="edit-name" value="" class="form-control" placeholder="nombre">
-					</div>
-					<div class="form-group">
-						<label for="name">precio :</label>
-						<input type="number" name="price" id="edit-price" value="" class="form-control" min="0" placeholder="precio">
-						<input type="hidden" name="id">
-					</div>
-					<input type="button" value="guardar" onclick="editSave()" class="btn btn-primary">
-					<input type="button" value="cancelar" onclick="editCancel()" class="btn btn-primary">
-				</form>
-			</div>
-		</div>
+    <!-- Formulario para Editar Producto -->
+    <div class="edit overlay">
+        <div class="edit-content col-md-8 col-sm-10 col-lg-8">
+            <h2 class="text-center">Editar Producto</h2>
+            <form name="editForm" id="editForm" action="#">
+                <div class="form-group">
+                    <label>Nombre del Producto:</label>
+                    <input type="text" name="name" id="edit-name" class="form-control" placeholder="Nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Precio (MXN):</label>
+                    <input type="number" name="price" id="edit-price" class="form-control" min="0" placeholder="Precio" required onkeydown="return event.key.match(/[0-9]/) || ['Backspace','ArrowLeft','ArrowRight','Delete','Tab'].includes(event.key)">
+                    <input type="hidden" name="id">
+                </div>
+                <input type="button" value="Guardar" onclick="editSave()" class="btn btn-primary">
+                <input type="button" value="Cancelar" onclick="editCancel()" class="btn btn-secondary">
+            </form>
+        </div>
+    </div>
 
-		<!-- Add Product -->
+    <!-- Formulario para Agregar Producto -->
+    <div class="add overlay">
+        <div class="add-content col-md-8 col-sm-10 col-lg-8">
+            <h2 class="text-center">Agregar Producto</h2>
+            <form name="addForm" id="addForm" action="#">
+                <div class="form-group">
+                    <label>Nombre del Producto:</label>
+                    <input type="text" name="name" id="add-name" class="form-control" placeholder="..." required oninput="this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label>Precio (MXN):</label>
+                    <input type="number" name="price" id="add-price" class="form-control" min="0" placeholder="$" required onkeydown="return event.key.match(/[0-9]/) || ['Backspace','ArrowLeft','ArrowRight','Delete','Tab'].includes(event.key)"  required oninput="this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, '')">
+                </div>
+                <input type="button" value="Guardar" onclick="addSave()" class="btn btn-primary">
+                <input type="button" value="Cancelar" onclick="addCancel()" class="btn btn-secondary">
+            </form>
+        </div>
+    </div>
 
-		<div class="add overlay">
-			<div class="add-content col-md-8 col-sm-10 col-lg-8">
-				<h2 class="text-center">nuevo producto</h2>
-				<form name="addForm" id="addForm" action="#">
-					<div class="form-group">
-						<label for="name">nombre :</label>
-						<input type="text" name="name" id="add-name" value="" class="form-control" placeholder="..." required>
-					</div>
-					<div class="form-group">
-						<label for="name">precio :</label>
-						<input type="number" name="price" id="add-price" value="" class="form-control" min="0" placeholder="$" required>
-					</div>
-					<input type="button" value="guardar" onclick="addSave()" class="btn btn-primary">
-					<input type="button" value="cancelar" onclick="addCancel()" class="btn btn-primary">
-				</form>
-			</div>
-		</div>
-
-		<!-- Selected View Products -->
-		<div class="view-list overlay">
-			<div class="view-content col-md-8 col-sm-10 col-lg-8">
-				<h2 class="text-center">lista de procuctos</h2>
-				<table class="col-md-6 col-sm-10 col-lg-6">
-					<thead><th>#</th><th>nombre</th><th>precio</th></thead>
-					<tbody id="select-view-tbody"></tbody>
-				</table>
-				<div class="view-btn-close">
-					<button class="btn btn-primary" onclick="selectViewClose()">cerrar</button>
-				</div>
-			</div>
-		</div>
-	</body>
+    <!-- Lista de Productos Seleccionados -->
+    <div class="view-list overlay">
+        <div class="view-content col-md-8 col-sm-10 col-lg-8">
+            <h2 class="text-center">Productos Seleccionados</h2>
+            <table class="table">
+                <thead>
+                    <tr><th>ID</th><th>Nombre</th><th>Precio $MXN</th></tr>
+                </thead>
+                <tbody id="select-view-tbody"></tbody>
+            </table>
+            <div class="view-btn-close text-end">
+                <button class="btn btn-secondary" onclick="selectViewClose()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
